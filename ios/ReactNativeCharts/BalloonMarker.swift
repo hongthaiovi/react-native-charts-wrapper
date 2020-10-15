@@ -247,6 +247,7 @@ open class BalloonMarker: MarkerView {
     open override func refreshContent(entry: ChartDataEntry, highlight: Highlight) {
         
         var label : String;
+        var title : String = "";
         
         if let candleEntry = entry as? CandleChartDataEntry {
             label = candleEntry.close.description
@@ -254,16 +255,18 @@ open class BalloonMarker: MarkerView {
             label = entry.y.description
         }
         
-        labelTitle = entry.x.description as NSString
-        
         if let object = entry.data as? JSON {
             if object["marker"].exists() {
                 label = object["marker"].stringValue;
+                title = object["title"].stringValue
                 if highlight.stackIndex != -1 && object["marker"].array != nil {
                     label = object["marker"].arrayValue[highlight.stackIndex].stringValue
+                    title = object["title"].arrayValue[highlight.stackIndex].stringValue
                 }
             }
         }
+        
+        labelTitle = title as NSString
         
         labelns = label as NSString
         
